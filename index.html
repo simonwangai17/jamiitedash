@@ -50,19 +50,12 @@
       background-color: #f28b00;
     }
 
-    /* Hiding all sections by default except Leads */
-    .section,
-    .profile-section,
-    .withdraw-section,
-    .opportunity-section,
-    .add-client-section {
+    /* Hide all sections by default */
+    .section {
       display: none;
     }
 
-    #leads {
-      display: block;
-    }
-
+    /* Status Cards Styling */
     .status-cards {
       display: flex;
       justify-content: space-around;
@@ -86,28 +79,19 @@
     .opportunity-list {
       width: 100%;
       border-collapse: collapse;
+      font-size: 14px;
     }
 
     .customer-list th,
     .customer-list td,
     .opportunity-list th,
     .opportunity-list td {
-      padding: 10px;
+      padding: 8px;
       border: 1px solid #ddd;
       text-align: center;
     }
 
-    .customer-list .status.active {
-      color: green;
-      font-weight: bold;
-    }
-
-    .customer-list .status.inactive {
-      color: red;
-      font-weight: bold;
-    }
-
-    .account-section button {
+    .opportunity-buttons button {
       margin-right: 10px;
     }
 
@@ -127,30 +111,43 @@
       border: 1px solid #ddd;
     }
 
-    /* Survey, Token, Referral Buttons */
-    .opportunity-section button {
-      margin-bottom: 15px;
-    }
-
-    .survey-list,
-    .token-list,
-    .referral-list {
+    /* Opportunities Section Referral Button Spacing */
+    #generateReferralButton {
       margin-top: 20px;
     }
 
-    .token-list,
-    .survey-list,
-    .referral-list {
-      display: none;
-    }
-
-    .token-list,
-    .survey-list,
-    .referral-list {
-      padding: 10px;
-      background-color: #f9f9f9;
+    /* Profile and Dropdown Sections CSS */
+    .profile-fields, .dropdown-container {
+      background-color: #f8f9fa;
+      padding: 15px;
       border-radius: 8px;
-      margin-top: 20px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .dropdown-container label,
+    .profile-fields label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .dropdown-container input,
+    .profile-fields input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .dropdown-container select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -165,7 +162,7 @@
     </div>
 
     <!-- Leads Section (Visible by Default) -->
-    <div id="leads" class="section">
+    <div id="leads" class="section" style="display: block;">
       <div class="status-cards">
         <div class="status-card">
           <h3>Leads</h3>
@@ -215,39 +212,83 @@
         </div>
       </div>
 
-      <div class="opportunity-section">
-        <button onclick="showSurvey()">Surveys</button>
-        <button onclick="showToken()">Tokens</button>
-        <button onclick="showReferral()">Referral</button>
+      <!-- Main Buttons for Surveys, Tokens, Referral with spacing -->
+      <div class="opportunity-buttons">
+        <button onclick="showOpportunitiesSection('surveys')">Surveys</button>
+        <button onclick="showOpportunitiesSection('tokens')">Tokens</button>
+        <button onclick="showOpportunitiesSection('referral')" id="referralButton">Referral</button>
       </div>
 
-      <!-- Survey Section -->
-      <div id="survey" class="survey-list">
-        <button onclick="startSurvey()">Start Survey</button>
+      <!-- Surveys Section -->
+      <div id="surveys" class="opportunity-subsection" style="display: none;">
+        <h4>Survey List:</h4>
+        <table class="opportunity-list">
+          <thead>
+            <tr>
+              <th>Survey Name</th>
+              <th>Duration</th>
+              <th>Payout</th>
+              <th>Start</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Customer Satisfaction Survey</td>
+              <td>10 mins</td>
+              <td>$5</td>
+              <td><button onclick="startSurvey()">Start</button></td>
+            </tr>
+            <tr>
+              <td>Product Feedback Survey</td>
+              <td>15 mins</td>
+              <td>$7</td>
+              <td><button onclick="startSurvey()">Start</button></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <!-- Token Section -->
-      <div id="tokens" class="token-list">
-        <h4>Your Token List:</h4>
-        <ul id="tokenList">
-          <li>Buy groceries - <button onclick="grabToken()">Grab Token</button></li>
-          <li>Pay bills - <button onclick="grabToken()">Grab Token</button></li>
-        </ul>
+      <!-- Tokens Section -->
+      <div id="tokens" class="opportunity-subsection" style="display: none;">
+        <h4>Token List:</h4>
+        <table class="opportunity-list">
+          <thead>
+            <tr>
+              <th>Token Name</th>
+              <th>Duration</th>
+              <th>Payout</th>
+              <th>Grab</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Buy Groceries</td>
+              <td>5 mins</td>
+              <td>$2</td>
+              <td><button onclick="grabToken()">Grab Token</button></td>
+            </tr>
+            <tr>
+              <td>Pay Bills</td>
+              <td>3 mins</td>
+              <td>$1</td>
+              <td><button onclick="grabToken()">Grab Token</button></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <!-- Referral Section -->
-      <div id="referrals" class="referral-list">
-        <button onclick="generateReferralCode()">Generate Referral Code</button>
+      <!-- Referral Section with Spacing for Button -->
+      <div id="referral" class="opportunity-subsection" style="display: none;">
+        <button id="generateReferralButton" onclick="generateReferralCode()">Get Your Referral Code</button>
         <p>Your Referral Code: <strong id="referralCode"></strong></p>
 
-        <!-- Referral Table -->
         <table class="customer-list">
           <thead>
             <tr>
               <th>Name</th>
-              <th>Username</th>
               <th>Phone</th>
-              <th>Status</th>
+              <th>Email</th>
+              <th>Account Status</th>
             </tr>
           </thead>
           <tbody id="referralTable">
@@ -258,132 +299,101 @@
     </div>
 
     <!-- Account Section -->
-    <div id="account" class="section account-section">
-      <button onclick="showProfile()">Profile</button>
-      <button onclick="showWithdraw()">Withdraw</button>
-      <button onclick="showAddClient()">Add Client</button>
+    <div id="account" class="section">
+      <div class="dropdown-container">
+        <button onclick="showProfile()">Profile</button>
+        <button onclick="showWithdraw()">Withdraw</button>
+        <button onclick="showAddClient()">Add Client</button>
+      </div>
 
       <!-- Profile Section -->
-      <div class="profile-section">
-        <p><strong>Name:</strong> John Doe</p>
-        <p><strong>Username:</strong> johndoe</p>
-        <p><strong>Email:</strong> johndoe@example.com</p>
-        <label>Phone: <input type="text" placeholder="Enter new phone number"></label>
-        <label>Password: <input type="password" placeholder="Enter new password"></label>
-        <button>Save Changes</button>
+      <div id="profileSection" style="display: none;" class="profile-fields">
+        <label>Name: <input type="text" value="John Doe" disabled></label>
+        <label>Phone: <input type="text" value="+123456789" disabled></label>
+        <label>Username: <input type="text" value="johndoe" disabled></label>
+        <label>Email: <input type="email" value="johndoe@example.com" disabled></label>
+        <label>Password: <input type="password" id="newPassword" placeholder="Enter new password"></label>
+        <button onclick="updatePassword()">Update</button>
       </div>
 
       <!-- Withdraw Section -->
-      <div class="withdraw-section">
-        <label>Phone Number: <input type="text" placeholder="Enter phone number"></label>
-        <label>Amount: <input type="text" placeholder="Enter amount"></label>
-        <button onclick="sendWithdrawRequest()">Request Withdraw</button>
+      <div id="withdrawSection" style="display: none;" class="dropdown-container">
+        <label>Phone Number: <input type="text" id="withdrawPhone" placeholder="Enter phone number"></label>
+        <label>Amount: <input type="number" id="withdrawAmount" placeholder="Enter amount"></label>
+        <button onclick="requestPayout()">Request Payout</button>
       </div>
 
       <!-- Add Client Section -->
-      <div class="add-client-section">
-        <form class="form-container" onsubmit="addClient(event)">
-          <label>Full Name: <input type="text" id="clientName" required></label>
-          <label>Username: <input type="text" id="clientUsername" required></label>
-          <label>Email: <input type="email" id="clientEmail" required></label>
-          <label>Phone Number: <input type="tel" id="clientPhone" required></label>
-          <button type="submit">Submit</button>
-        </form>
+      <div id="addClientSection" style="display: none;" class="dropdown-container">
+        <label>Full Name: <input type="text" id="clientFullName" placeholder="Enter full name"></label>
+        <label>Username: <input type="text" id="clientUsername" placeholder="Enter username"></label>
+        <label>Email: <input type="email" id="clientEmail" placeholder="Enter email"></label>
+        <label>Phone: <input type="text" id="clientPhone" placeholder="Enter phone number"></label>
+        <button onclick="showVerification()">Next</button>
       </div>
     </div>
   </div>
 
   <script>
-    // Show and hide sections
+    // Show section functionality
     function showSection(sectionId) {
-      document.querySelectorAll('.section').forEach(section => {
-        section.style.display = 'none';
-      });
+      document.querySelectorAll('.section').forEach(section => section.style.display = 'none');
       document.getElementById(sectionId).style.display = 'block';
     }
 
-    function showProfile() {
-      document.querySelector('.profile-section').style.display = 'block';
-      document.querySelector('.withdraw-section').style.display = 'none';
-      document.querySelector('.add-client-section').style.display = 'none';
-    }
-
-    function showWithdraw() {
-      document.querySelector('.withdraw-section').style.display = 'block';
-      document.querySelector('.profile-section').style.display = 'none';
-      document.querySelector('.add-client-section').style.display = 'none';
-    }
-
-    function showAddClient() {
-      document.querySelector('.add-client-section').style.display = 'block';
-      document.querySelector('.profile-section').style.display = 'none';
-      document.querySelector('.withdraw-section').style.display = 'none';
-    }
-
-    function showSurvey() {
-      document.querySelector('#survey').style.display = 'block';
-      document.querySelector('#tokens').style.display = 'none';
-      document.querySelector('#referrals').style.display = 'none';
-    }
-
-    function showToken() {
-      document.querySelector('#tokens').style.display = 'block';
-      document.querySelector('#survey').style.display = 'none';
-      document.querySelector('#referrals').style.display = 'none';
-    }
-
-    function showReferral() {
-      document.querySelector('#referrals').style.display = 'block';
-      document.querySelector('#survey').style.display = 'none';
-      document.querySelector('#tokens').style.display = 'none';
-    }
-
-    function grabToken() {
-      alert("Token Grabbed!");
-    }
-
-    function startSurvey() {
-      alert("Survey Started!");
+    // Opportunities Section Functions
+    function showOpportunitiesSection(subsectionId) {
+      document.querySelectorAll('.opportunity-subsection').forEach(subsection => subsection.style.display = 'none');
+      document.getElementById(subsectionId).style.display = 'block';
     }
 
     function generateReferralCode() {
-      const referralCode = "REF" + Math.floor(Math.random() * 100000);
+      const referralCode = `REF${Math.floor(Math.random() * 10000)}`;
       document.getElementById("referralCode").innerText = referralCode;
-
-      // Add Referral to table
-      const referralTable = document.getElementById("referralTable");
-      const row = referralTable.insertRow();
-      row.innerHTML = `
-        <td>John Doe</td>
-        <td>johndoe</td>
-        <td>+123456789</td>
-        <td class="status active">Active</td>
-      `;
+      document.getElementById("generateReferralButton").disabled = true;
     }
 
-    function sendWithdrawRequest() {
-      alert(`Withdraw request sent!`);
+    function grabToken() {
+      alert("Token grabbed!");
     }
 
-    // Sample data population for demo purposes
-    document.getElementById("leadsCount").innerText = 5;
-    document.getElementById("newCustomersCount").innerText = 2;
-    document.getElementById("clientsCount").innerText = 3;
-    document.getElementById("customerList").innerHTML = `
-      <tr>
-        <td>John Doe</td>
-        <td>+123456789</td>
-        <td>johndoe</td>
-        <td>johndoe@example.com</td>
-        <td class="status active">Active</td>
-      </tr>
-      <tr>
-        <td>Jane Smith</td>
-        <td>+987654321</td>
-        <td>janesmith</td>
-        <td>janesmith@example.com</td>
-        <td class="status inactive">Inactive</td>
-      </tr>`;
+    function startSurvey() {
+      alert("Survey started!");
+    }
+
+    // Account Section Functions
+    function showProfile() {
+      document.getElementById("profileSection").style.display = 'block';
+      document.getElementById("withdrawSection").style.display = 'none';
+      document.getElementById("addClientSection").style.display = 'none';
+    }
+
+    function showWithdraw() {
+      document.getElementById("profileSection").style.display = 'none';
+      document.getElementById("withdrawSection").style.display = 'block';
+      document.getElementById("addClientSection").style.display = 'none';
+    }
+
+    function showAddClient() {
+      document.getElementById("profileSection").style.display = 'none';
+      document.getElementById("withdrawSection").style.display = 'none';
+      document.getElementById("addClientSection").style.display = 'block';
+    }
+
+    function updatePassword() {
+      const newPassword = document.getElementById("newPassword").value;
+      alert("Password updated to: " + newPassword);
+    }
+
+    function requestPayout() {
+      const phone = document.getElementById("withdrawPhone").value;
+      const amount = document.getElementById("withdrawAmount").value;
+      alert("Payout request sent for " + phone + " with amount: " + amount);
+    }
+
+    function showVerification() {
+      alert("Next step: Verification.");
+    }
   </script>
 </body>
 
