@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jamii Investors Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Basic styling for dashboard */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .dashboard h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .buttons, .boxes {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            background-color: #3498db;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .box {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 5px;
+        }
+
+        .active-status {
+            color: green;
+            font-weight: bold;
+        }
+
+        .inactive-status {
+            color: red;
+            font-weight: bold;
+        }
+
+        /* Section styling */
+        .content-section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .opportunity-tabs button {
+            margin: 0 5px;
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <h1>Jamii Investors Dashboard</h1>
+
+    <!-- Top buttons for navigation -->
+    <div class="buttons">
+        <button onclick="showSection('leads')">Leads</button>
+        <button onclick="showSection('opportunities')">Opportunities</button>
+        <button onclick="showSection('account')">Account</button>
+    </div>
+
+    <!-- Leads Section -->
+    <div id="leads" class="content-section">
+        <div class="boxes">
+            <div class="box">Leads: <span id="leadsCount">0</span></div>
+            <div class="box">New Customers: <span id="newCustomersCount">0</span></div>
+            <div class="box">Clients: <span id="clientsCount">0</span></div>
+        </div>
+        <h3>Registered Customers</h3>
+        <table border="1" cellpadding="10" width="100%">
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Status</th>
+            </tr>
+            <tr>
+                <td>John Doe</td>
+                <td>+123456789</td>
+                <td>john_doe</td>
+                <td>john@example.com</td>
+                <td><span class="active-status">Active</span></td>
+            </tr>
+            <tr>
+                <td>Jane Smith</td>
+                <td>+987654321</td>
+                <td>jane_smith</td>
+                <td>jane@example.com</td>
+                <td><span class="inactive-status">Inactive</span></td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Opportunities Section -->
+    <div id="opportunities" class="content-section">
+        <div class="boxes">
+            <div class="box">Open: <span id="openCount">0</span></div>
+            <div class="box">Undergoing: <span id="undergoingCount">0</span></div>
+            <div class="box">Completed: <span id="completedCount">0</span></div>
+        </div>
+
+        <div class="opportunity-tabs">
+            <button onclick="showTab('referral')">Referral</button>
+            <button onclick="showTab('surveys')" disabled>Surveys</button>
+            <button onclick="showTab('tokens')" disabled>Tokens</button>
+        </div>
+
+        <div id="referral" class="tab-content">
+            <h3>Referral</h3>
+            <button onclick="generateReferralCode()">Generate Referral Code</button>
+            <p id="referralCode">Referral Code: </p>
+        </div>
+    </div>
+
+    <!-- Account Section -->
+    <div id="account" class="content-section">
+        <h3>Your Profile</h3>
+        <p>Name: John Doe</p>
+        <p>Phone: <input type="text" value="+123456789"></p>
+        <p>Username: john_doe</p>
+        <p>Email: john@example.com</p>
+        <p>Password: <input type="password" value="password123"></p>
+
+        <h3>Withdraw</h3>
+        <form id="withdrawForm">
+            <p>Phone Number: <input type="text" name="phone" required></p>
+            <p>Amount: <input type="number" name="amount" required></p>
+            <button type="submit">Request Withdraw</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function showSection(sectionId) {
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.style.display = section.id === sectionId ? 'block' : 'none';
+        });
+    }
+
+    // Counter Logic
+    let leadsCount = 0;
+    let newCustomersCount = 0;
+    let clientsCount = 0;
+    let openCount = 0;
+    let undergoingCount = 0;
+    let completedCount = 0;
+
+    // Referral code generation
+    function generateReferralCode() {
+        const referralCode = 'REF-' + Math.floor(Math.random() * 10000);
+        document.getElementById('referralCode').innerText = `Referral Code: ${referralCode}`;
+    }
+
+    // Show specific opportunity tab
+    function showTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.getElementById(tabId).classList.add('active');
+    }
+
+    // Handle withdraw request
+    document.getElementById('withdrawForm').onsubmit = function (e) {
+        e.preventDefault();
+        const phone = e.target.phone.value;
+        const amount = e.target.amount.value;
+        alert(`Withdraw request sent for ${amount} to phone number ${phone}`);
+    };
+</script>
+</body>
+</html>
