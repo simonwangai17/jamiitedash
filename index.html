@@ -1,214 +1,390 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jamii Investors Dashboard</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        /* Basic styling for dashboard */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jamii Investors Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* General Dashboard Styles */
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #333;
+    }
 
-        .dashboard {
-            max-width: 1000px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
+    .dashboard-container {
+      width: 80%;
+      max-width: 1200px;
+      margin: 20px;
+      padding: 20px;
+      background-color: #ffffff;
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
 
-        .dashboard h1 {
-            text-align: center;
-            color: #333;
-        }
+    .nav-buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
 
-        .buttons, .boxes {
-            display: flex;
-            justify-content: space-around;
-            margin: 20px 0;
-        }
+    button {
+      background-color: #f2b200;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
 
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            background-color: #3498db;
-            transition: background-color 0.3s;
-        }
+    button:hover {
+      background-color: #f28b00;
+    }
 
-        button:hover {
-            background-color: #2980b9;
-        }
+    /* Hiding all sections by default except Leads */
+    .section,
+    .profile-section,
+    .withdraw-section,
+    .opportunity-section,
+    .add-client-section {
+      display: none;
+    }
 
-        .box {
-            flex: 1;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin: 5px;
-        }
+    #leads {
+      display: block;
+    }
 
-        .active-status {
-            color: green;
-            font-weight: bold;
-        }
+    .status-cards {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
 
-        .inactive-status {
-            color: red;
-            font-weight: bold;
-        }
+    .status-card {
+      flex: 1;
+      text-align: center;
+      padding: 20px;
+      background-color: #e0e4ff;
+      margin: 0 10px;
+      border-radius: 8px;
+    }
 
-        /* Section styling */
-        .content-section {
-            display: none;
-            margin-top: 20px;
-        }
+    .status-card h3 {
+      margin-bottom: 10px;
+    }
 
-        .opportunity-tabs button {
-            margin: 0 5px;
-            padding: 8px 12px;
-            font-size: 14px;
-        }
+    .customer-list,
+    .opportunity-list {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
-        .tab-content {
-            display: none;
-        }
+    .customer-list th,
+    .customer-list td,
+    .opportunity-list th,
+    .opportunity-list td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
 
-        .tab-content.active {
-            display: block;
-        }
-    </style>
+    .customer-list .status.active {
+      color: green;
+      font-weight: bold;
+    }
+
+    .customer-list .status.inactive {
+      color: red;
+      font-weight: bold;
+    }
+
+    .account-section button {
+      margin-right: 10px;
+    }
+
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .form-container label {
+      font-weight: bold;
+    }
+
+    .form-container input {
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+
+    /* Survey, Token, Referral Buttons */
+    .opportunity-section button {
+      margin-bottom: 15px;
+    }
+
+    .survey-list,
+    .token-list,
+    .referral-list {
+      margin-top: 20px;
+    }
+
+    .token-list,
+    .survey-list,
+    .referral-list {
+      display: none;
+    }
+
+    .token-list,
+    .survey-list,
+    .referral-list {
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+  </style>
 </head>
+
 <body>
-
-<div class="dashboard">
-    <h1>Jamii Investors Dashboard</h1>
-
-    <!-- Top buttons for navigation -->
-    <div class="buttons">
-        <button onclick="showSection('leads')">Leads</button>
-        <button onclick="showSection('opportunities')">Opportunities</button>
-        <button onclick="showSection('account')">Account</button>
+  <div class="dashboard-container">
+    <!-- Dashboard Navigation Buttons -->
+    <div class="nav-buttons">
+      <button onclick="showSection('leads')">Leads</button>
+      <button onclick="showSection('opportunities')">Opportunities</button>
+      <button onclick="showSection('account')">Account</button>
     </div>
 
-    <!-- Leads Section -->
-    <div id="leads" class="content-section">
-        <div class="boxes">
-            <div class="box">Leads: <span id="leadsCount">0</span></div>
-            <div class="box">New Customers: <span id="newCustomersCount">0</span></div>
-            <div class="box">Clients: <span id="clientsCount">0</span></div>
+    <!-- Leads Section (Visible by Default) -->
+    <div id="leads" class="section">
+      <div class="status-cards">
+        <div class="status-card">
+          <h3>Leads</h3>
+          <p id="leadsCount">0</p>
         </div>
-        <h3>Registered Customers</h3>
-        <table border="1" cellpadding="10" width="100%">
-            <tr>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Status</th>
-            </tr>
-            <tr>
-                <td>John Doe</td>
-                <td>+123456789</td>
-                <td>john_doe</td>
-                <td>john@example.com</td>
-                <td><span class="active-status">Active</span></td>
-            </tr>
-            <tr>
-                <td>Jane Smith</td>
-                <td>+987654321</td>
-                <td>jane_smith</td>
-                <td>jane@example.com</td>
-                <td><span class="inactive-status">Inactive</span></td>
-            </tr>
-        </table>
+        <div class="status-card">
+          <h3>New Customers</h3>
+          <p id="newCustomersCount">0</p>
+        </div>
+        <div class="status-card">
+          <h3>Clients</h3>
+          <p id="clientsCount">0</p>
+        </div>
+      </div>
+
+      <!-- Customer List -->
+      <table class="customer-list">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="customerList">
+          <!-- Data will be populated by JavaScript -->
+        </tbody>
+      </table>
     </div>
 
     <!-- Opportunities Section -->
-    <div id="opportunities" class="content-section">
-        <div class="boxes">
-            <div class="box">Open: <span id="openCount">0</span></div>
-            <div class="box">Undergoing: <span id="undergoingCount">0</span></div>
-            <div class="box">Completed: <span id="completedCount">0</span></div>
+    <div id="opportunities" class="section">
+      <div class="status-cards">
+        <div class="status-card">
+          <h3>Open</h3>
+          <p id="openCount">0</p>
         </div>
+        <div class="status-card">
+          <h3>Undergoing</h3>
+          <p id="undergoingCount">0</p>
+        </div>
+        <div class="status-card">
+          <h3>Completed</h3>
+          <p id="completedCount">0</p>
+        </div>
+      </div>
 
-        <div class="opportunity-tabs">
-            <button onclick="showTab('referral')">Referral</button>
-            <button onclick="showTab('surveys')" disabled>Surveys</button>
-            <button onclick="showTab('tokens')" disabled>Tokens</button>
-        </div>
+      <div class="opportunity-section">
+        <button onclick="showSurvey()">Surveys</button>
+        <button onclick="showToken()">Tokens</button>
+        <button onclick="showReferral()">Referral</button>
+      </div>
 
-        <div id="referral" class="tab-content">
-            <h3>Referral</h3>
-            <button onclick="generateReferralCode()">Generate Referral Code</button>
-            <p id="referralCode">Referral Code: </p>
-        </div>
+      <!-- Survey Section -->
+      <div id="survey" class="survey-list">
+        <button onclick="startSurvey()">Start Survey</button>
+      </div>
+
+      <!-- Token Section -->
+      <div id="tokens" class="token-list">
+        <h4>Your Token List:</h4>
+        <ul id="tokenList">
+          <li>Buy groceries - <button onclick="grabToken()">Grab Token</button></li>
+          <li>Pay bills - <button onclick="grabToken()">Grab Token</button></li>
+        </ul>
+      </div>
+
+      <!-- Referral Section -->
+      <div id="referrals" class="referral-list">
+        <button onclick="generateReferralCode()">Generate Referral Code</button>
+        <p>Your Referral Code: <strong id="referralCode"></strong></p>
+
+        <!-- Referral Table -->
+        <table class="customer-list">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Username</th>
+              <th>Phone</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="referralTable">
+            <!-- Data will be populated by JavaScript -->
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- Account Section -->
-    <div id="account" class="content-section">
-        <h3>Your Profile</h3>
-        <p>Name: John Doe</p>
-        <p>Phone: <input type="text" value="+123456789"></p>
-        <p>Username: john_doe</p>
-        <p>Email: john@example.com</p>
-        <p>Password: <input type="password" value="password123"></p>
+    <div id="account" class="section account-section">
+      <button onclick="showProfile()">Profile</button>
+      <button onclick="showWithdraw()">Withdraw</button>
+      <button onclick="showAddClient()">Add Client</button>
 
-        <h3>Withdraw</h3>
-        <form id="withdrawForm">
-            <p>Phone Number: <input type="text" name="phone" required></p>
-            <p>Amount: <input type="number" name="amount" required></p>
-            <button type="submit">Request Withdraw</button>
+      <!-- Profile Section -->
+      <div class="profile-section">
+        <p><strong>Name:</strong> John Doe</p>
+        <p><strong>Username:</strong> johndoe</p>
+        <p><strong>Email:</strong> johndoe@example.com</p>
+        <label>Phone: <input type="text" placeholder="Enter new phone number"></label>
+        <label>Password: <input type="password" placeholder="Enter new password"></label>
+        <button>Save Changes</button>
+      </div>
+
+      <!-- Withdraw Section -->
+      <div class="withdraw-section">
+        <label>Phone Number: <input type="text" placeholder="Enter phone number"></label>
+        <label>Amount: <input type="text" placeholder="Enter amount"></label>
+        <button onclick="sendWithdrawRequest()">Request Withdraw</button>
+      </div>
+
+      <!-- Add Client Section -->
+      <div class="add-client-section">
+        <form class="form-container" onsubmit="addClient(event)">
+          <label>Full Name: <input type="text" id="clientName" required></label>
+          <label>Username: <input type="text" id="clientUsername" required></label>
+          <label>Email: <input type="email" id="clientEmail" required></label>
+          <label>Phone Number: <input type="tel" id="clientPhone" required></label>
+          <button type="submit">Submit</button>
         </form>
+      </div>
     </div>
-</div>
+  </div>
 
-<script>
+  <script>
+    // Show and hide sections
     function showSection(sectionId) {
-        document.querySelectorAll('.content-section').forEach(section => {
-            section.style.display = section.id === sectionId ? 'block' : 'none';
-        });
+      document.querySelectorAll('.section').forEach(section => {
+        section.style.display = 'none';
+      });
+      document.getElementById(sectionId).style.display = 'block';
     }
 
-    // Counter Logic
-    let leadsCount = 0;
-    let newCustomersCount = 0;
-    let clientsCount = 0;
-    let openCount = 0;
-    let undergoingCount = 0;
-    let completedCount = 0;
+    function showProfile() {
+      document.querySelector('.profile-section').style.display = 'block';
+      document.querySelector('.withdraw-section').style.display = 'none';
+      document.querySelector('.add-client-section').style.display = 'none';
+    }
 
-    // Referral code generation
+    function showWithdraw() {
+      document.querySelector('.withdraw-section').style.display = 'block';
+      document.querySelector('.profile-section').style.display = 'none';
+      document.querySelector('.add-client-section').style.display = 'none';
+    }
+
+    function showAddClient() {
+      document.querySelector('.add-client-section').style.display = 'block';
+      document.querySelector('.profile-section').style.display = 'none';
+      document.querySelector('.withdraw-section').style.display = 'none';
+    }
+
+    function showSurvey() {
+      document.querySelector('#survey').style.display = 'block';
+      document.querySelector('#tokens').style.display = 'none';
+      document.querySelector('#referrals').style.display = 'none';
+    }
+
+    function showToken() {
+      document.querySelector('#tokens').style.display = 'block';
+      document.querySelector('#survey').style.display = 'none';
+      document.querySelector('#referrals').style.display = 'none';
+    }
+
+    function showReferral() {
+      document.querySelector('#referrals').style.display = 'block';
+      document.querySelector('#survey').style.display = 'none';
+      document.querySelector('#tokens').style.display = 'none';
+    }
+
+    function grabToken() {
+      alert("Token Grabbed!");
+    }
+
+    function startSurvey() {
+      alert("Survey Started!");
+    }
+
     function generateReferralCode() {
-        const referralCode = 'REF-' + Math.floor(Math.random() * 10000);
-        document.getElementById('referralCode').innerText = `Referral Code: ${referralCode}`;
+      const referralCode = "REF" + Math.floor(Math.random() * 100000);
+      document.getElementById("referralCode").innerText = referralCode;
+
+      // Add Referral to table
+      const referralTable = document.getElementById("referralTable");
+      const row = referralTable.insertRow();
+      row.innerHTML = `
+        <td>John Doe</td>
+        <td>johndoe</td>
+        <td>+123456789</td>
+        <td class="status active">Active</td>
+      `;
     }
 
-    // Show specific opportunity tab
-    function showTab(tabId) {
-        document.querySelectorAll('.tab-content').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        document.getElementById(tabId).classList.add('active');
+    function sendWithdrawRequest() {
+      alert(`Withdraw request sent!`);
     }
 
-    // Handle withdraw request
-    document.getElementById('withdrawForm').onsubmit = function (e) {
-        e.preventDefault();
-        const phone = e.target.phone.value;
-        const amount = e.target.amount.value;
-        alert(`Withdraw request sent for ${amount} to phone number ${phone}`);
-    };
-</script>
+    // Sample data population for demo purposes
+    document.getElementById("leadsCount").innerText = 5;
+    document.getElementById("newCustomersCount").innerText = 2;
+    document.getElementById("clientsCount").innerText = 3;
+    document.getElementById("customerList").innerHTML = `
+      <tr>
+        <td>John Doe</td>
+        <td>+123456789</td>
+        <td>johndoe</td>
+        <td>johndoe@example.com</td>
+        <td class="status active">Active</td>
+      </tr>
+      <tr>
+        <td>Jane Smith</td>
+        <td>+987654321</td>
+        <td>janesmith</td>
+        <td>janesmith@example.com</td>
+        <td class="status inactive">Inactive</td>
+      </tr>`;
+  </script>
 </body>
+
 </html>
