@@ -1,298 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jamii Investors Dashboard</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    /* General Dashboard Styles */
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f9;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: #333;
-    }
-
-    .dashboard-container {
-      width: 80%;
-      max-width: 1200px;
-      margin: 20px;
-      padding: 20px;
-      background-color: #ffffff;
-      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-    }
-
-    .nav-buttons {
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 20px;
-    }
-
-    button {
-      background-color: #f2b200;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      color: white;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s;
-    }
-
-    button:hover {
-      background-color: #f28b00;
-    }
-
-    /* Hide all sections by default */
-    .section {
-      display: none;
-    }
-
-    /* Status Cards Styling */
-    .status-cards {
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 20px;
-    }
-
-    .status-card {
-      flex: 1;
-      text-align: center;
-      padding: 20px;
-      background-color: #e0e4ff;
-      margin: 0 10px;
-      border-radius: 8px;
-    }
-
-    .status-card h3 {
-      margin-bottom: 10px;
-    }
-
-    .customer-list,
-    .opportunity-list {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-
-    .customer-list th,
-    .customer-list td,
-    .opportunity-list th,
-    .opportunity-list td {
-      padding: 8px;
-      border: 1px solid #ddd;
-      text-align: center;
-    }
-
-    .opportunity-buttons button {
-      margin-right: 10px;
-    }
-
-    .form-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .form-container label {
-      font-weight: bold;
-    }
-
-    .form-container input {
-      padding: 8px;
-      border-radius: 4px;
-      border: 1px solid #ddd;
-    }
-
-    /* Opportunities Section Referral Button Spacing */
-    #generateReferralButton {
-      margin-top: 20px;
-    }
-
-    /* Profile and Dropdown Sections CSS */
-    .profile-fields, .dropdown-container {
-      background-color: #f8f9fa;
-      padding: 15px;
-      border-radius: 8px;
-      margin-top: 15px;
-      margin-bottom: 15px;
-      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .dropdown-container label,
-    .profile-fields label {
-      display: block;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-
-    .dropdown-container input,
-    .profile-fields input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-    }
-
-    .dropdown-container select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      margin-bottom: 10px;
-    }
-  </style>
+  <title>Investor Portal Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-  <div class="dashboard-container">
-    <!-- Dashboard Navigation Buttons -->
+  <!-- Navbar -->
+  <div class="navbar">
     <div class="nav-buttons">
-      <button onclick="showSection('leads')">Leads</button>
-      <button onclick="showSection('opportunities')">Opportunities</button>
+      <button onclick="showSection('lead')">Lead</button>
+      <button onclick="showSection('earning')">Earning</button>
       <button onclick="showSection('account')">Account</button>
     </div>
+    <div class="dropdown">
+      <button class="user-icon">User <span>&#9662;</span></button>
+      <div class="dropdown-content">
+        <a href="https://simonwangai17.github.io/jamiitels/" onclick="logout()">Logout</a>
+      </div>
+    </div>
+  </div>
 
-    <!-- Leads Section (Visible by Default) -->
-    <div id="leads" class="section" style="display: block;">
+  <!-- Dashboard Container -->
+  <div class="dashboard-container">
+    <!-- Lead Section -->
+    <div id="lead" class="section" style="display: block;">
       <div class="status-cards">
         <div class="status-card">
-          <h3>Leads</h3>
-          <p id="leadsCount">0</p>
+          <h3>Lead</h3>
+          <p id="leadCount">3</p>
         </div>
         <div class="status-card">
-          <h3>New Customers</h3>
-          <p id="newCustomersCount">0</p>
+          <h3>Earning</h3>
+          <p id="earningBalance">Ksh 0</p>
         </div>
         <div class="status-card">
-          <h3>Clients</h3>
-          <p id="clientsCount">0</p>
+          <h3>Payout Countdown</h3>
+          <p id="payoutCountdown">24 hours</p>
         </div>
       </div>
-
-      <!-- Customer List -->
-      <table class="customer-list">
+      <table class="form-list">
         <thead>
           <tr>
             <th>Name</th>
-            <th>Phone</th>
             <th>Username</th>
-            <th>Email</th>
             <th>Status</th>
           </tr>
         </thead>
-        <tbody id="customerList">
-          <!-- Data will be populated by JavaScript -->
+        <tbody id="leadList">
+          <!-- Dummy data -->
+          <tr>
+            <td>John Doe</td>
+            <td>john123</td>
+            <td><button onclick="showPaymentInstructions()">Activate</button></td>
+          </tr>
+          <tr>
+            <td>Jane Smith</td>
+            <td>jane_smith</td>
+            <td style="color: green;">Active</td>
+          </tr>
         </tbody>
       </table>
     </div>
+    <!-- Mpesa Payment Instructions Modal -->
+<div id="mpesaModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h4>Mpesa Payment Instructions</h4>
+    <ol>
+      <li>Open Mpesa Menu 📱</li>
+      <li>Select Lipa na Mpesa > Buy Goods and Services.</li>
+      <li>Enter Till Number: <strong>4951640</strong> 🔢</li>
+      <li>Enter Amount: <strong>Ksh 200</strong> 💰</li>
+      <li>Confirm Details and enter your Mpesa PIN 🔑</li>
+      <li>Press OK to complete ✅</li>
+    </ol>
+    <p>After Payment: You’ll receive a confirmation message from Mpesa with a Transaction Code. Enter this code below to confirm your payment.</p>
+    <input type="text" id="mpesaCode" placeholder="Enter Mpesa Transaction Code">
+    <button onclick="verifyMpesaCode()">Verify</button>
+  </div>
+</div>
 
-    <!-- Opportunities Section -->
-    <div id="opportunities" class="section">
-      <div class="status-cards">
-        <div class="status-card">
-          <h3>Open</h3>
-          <p id="openCount">0</p>
-        </div>
-        <div class="status-card">
-          <h3>Undergoing</h3>
-          <p id="undergoingCount">0</p>
-        </div>
-        <div class="status-card">
-          <h3>Completed</h3>
-          <p id="completedCount">0</p>
-        </div>
+
+    <!-- Earning Section -->
+    <div id="earning" class="section">
+      <div class="nav-buttons-section">
+        <button onclick="showEarningSection('surveys')">Surveys</button>
+        <button onclick="showEarningSection('tokens')">Tokens</button>
+        <button onclick="showEarningSection('referrals')">Referrals</button>
       </div>
 
-      <!-- Main Buttons for Surveys, Tokens, Referral with spacing -->
-      <div class="opportunity-buttons">
-        <button onclick="showOpportunitiesSection('surveys')">Surveys</button>
-        <button onclick="showOpportunitiesSection('tokens')">Tokens</button>
-        <button onclick="showOpportunitiesSection('referral')" id="referralButton">Referral</button>
-      </div>
-
-      <!-- Surveys Section -->
-      <div id="surveys" class="opportunity-subsection" style="display: none;">
-        <h4>Survey List:</h4>
-        <table class="opportunity-list">
+      <div id="surveys" class="sub-section">
+        <h4>Available Surveys</h4>
+        <table class="form-list">
           <thead>
             <tr>
               <th>Survey Name</th>
-              <th>Duration</th>
               <th>Payout</th>
-              <th>Start</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Customer Satisfaction Survey</td>
-              <td>10 mins</td>
-              <td>$5</td>
-              <td><button onclick="startSurvey()">Start</button></td>
-            </tr>
-            <tr>
-              <td>Product Feedback Survey</td>
-              <td>15 mins</td>
-              <td>$7</td>
-              <td><button onclick="startSurvey()">Start</button></td>
+              <td>Survey A</td>
+              <td>Ksh 100</td>
+              <td><button>Start</button></td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- Tokens Section -->
-      <div id="tokens" class="opportunity-subsection" style="display: none;">
-        <h4>Token List:</h4>
-        <table class="opportunity-list">
+      <div id="tokens" class="sub-section">
+        <h4>Available Tokens</h4>
+        <table class="form-list">
           <thead>
             <tr>
               <th>Token Name</th>
-              <th>Duration</th>
               <th>Payout</th>
               <th>Grab</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Buy Groceries</td>
-              <td>5 mins</td>
-              <td>$2</td>
-              <td><button onclick="grabToken()">Grab Token</button></td>
-            </tr>
-            <tr>
-              <td>Pay Bills</td>
-              <td>3 mins</td>
-              <td>$1</td>
-              <td><button onclick="grabToken()">Grab Token</button></td>
+              <td>Token A</td>
+              <td>Ksh 50</td>
+              <td><button>Grab</button></td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- Referral Section with Spacing for Button -->
-      <div id="referral" class="opportunity-subsection" style="display: none;">
-        <button id="generateReferralButton" onclick="generateReferralCode()">Get Your Referral Code</button>
-        <p>Your Referral Code: <strong id="referralCode"></strong></p>
-
-        <table class="customer-list">
+      <div id="referrals" class="sub-section">
+        <h4>Your Referral Code: ABC123</h4>
+        <table class="form-list">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Phone</th>
-              <th>Email</th>
-              <th>Account Status</th>
+              <th>Referred Client</th>
+              <th>Status</th>
+              <th>Contact</th>
             </tr>
           </thead>
-          <tbody id="referralTable">
-            <!-- Data will be populated by JavaScript -->
+          <tbody>
+            <tr>
+              <td>Michael Brown</td>
+              <td>Inactive</td>
+              <td><button>Contact</button></td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -300,101 +154,72 @@
 
     <!-- Account Section -->
     <div id="account" class="section">
-      <div class="dropdown-container">
-        <button onclick="showProfile()">Profile</button>
-        <button onclick="showWithdraw()">Withdraw</button>
-        <button onclick="showAddClient()">Add Client</button>
+      <div class="nav-buttons-section">
+        <button onclick="showAccountSection('profile')">Profile</button>
+        <button onclick="showAccountSection('funds')">Funds</button>
+        <button onclick="showAccountSection('addClient')">Add Client</button>
       </div>
 
-      <!-- Profile Section -->
-      <div id="profileSection" style="display: none;" class="profile-fields">
-        <label>Name: <input type="text" value="John Doe" disabled></label>
-        <label>Phone: <input type="text" value="+123456789" disabled></label>
-        <label>Username: <input type="text" value="johndoe" disabled></label>
-        <label>Email: <input type="email" value="johndoe@example.com" disabled></label>
-        <label>Password: <input type="password" id="newPassword" placeholder="Enter new password"></label>
-        <button onclick="updatePassword()">Update</button>
+      <div id="profile" class="sub-section profile-form">
+        <h4>Update Profile</h4>
+        <label>Name: <input type="text" placeholder="Enter your name"></label>
+        <label>Username: <input type="text" placeholder="Enter your username"></label>
+        <label>Email: <input type="email" placeholder="Enter your email"></label>
+        <label>Phone: <input type="tel" placeholder="Enter your phone"></label>
+        <button onclick="requestProfileUpdate()">Update</button>
       </div>
 
-      <!-- Withdraw Section -->
-      <div id="withdrawSection" style="display: none;" class="dropdown-container">
-        <label>Phone Number: <input type="text" id="withdrawPhone" placeholder="Enter phone number"></label>
-        <label>Amount: <input type="number" id="withdrawAmount" placeholder="Enter amount"></label>
-        <button onclick="requestPayout()">Request Payout</button>
+      
+      <div class="funds-section">
+        <button id="accountBalanceBtn" class="funds-button" onclick="showAccountBalance()">Account Balance</button>
+        <button id="withdrawBtn" class="funds-button" onclick="showWithdrawForm()">Withdraw</button>
+      
+        <!-- Account Balance Display -->
+        <div id="accountBalance" class="balance-card" style="display: none;">
+          <h4>Your Account Balance</h4>
+          <p>Ksh <span id="balanceAmount">00</span></p>
+          <h5>Recent Earnings</h5>
+          <table class="earnings-report">
+            <tr>
+              <th>Source</th>
+              <th>Payout Amount</th>
+              <th>Status</th>
+            </tr>
+            <tr>
+              <td>Survey</td>
+              <td>Ksh 0</td>
+              <td>Paid</td>
+            </tr>
+            <tr>
+              <td>Token</td>
+              <td>Ksh 0</td>
+              <td>Paid</td>
+            </tr>
+            <tr>
+              <td>Referral</td>
+              <td>Ksh 0</td>
+              <td>Unpaid</td>
+            </tr>
+          </table>
+        </div>
+      
+        <!-- Withdrawal Form -->
+        <div id="withdrawForm" class="withdraw-card" style="display: none;">
+          <h4>Withdraw Funds</h4>
+          <input type="text" id="withdrawPhone" placeholder="Enter Phone Number">
+          <input type="number" id="withdrawAmount" placeholder="Enter Amount">
+          <button onclick="requestPayout()">Request Payout</button>
+        </div>
       </div>
+      
 
-      <!-- Add Client Section -->
-      <div id="addClientSection" style="display: none;" class="dropdown-container">
-        <label>Full Name: <input type="text" id="clientFullName" placeholder="Enter full name"></label>
-        <label>Username: <input type="text" id="clientUsername" placeholder="Enter username"></label>
-        <label>Email: <input type="email" id="clientEmail" placeholder="Enter email"></label>
-        <label>Phone: <input type="text" id="clientPhone" placeholder="Enter phone number"></label>
-        <button onclick="showVerification()">Next</button>
+      <div id="addClient" class="sub-section">
+        <h4>Add a New Client</h4>
+        <p><a href="https://simonwangai17.github.io/regstration/">Add Client Here</a></p>
       </div>
     </div>
   </div>
 
-  <script>
-    // Show section functionality
-    function showSection(sectionId) {
-      document.querySelectorAll('.section').forEach(section => section.style.display = 'none');
-      document.getElementById(sectionId).style.display = 'block';
-    }
-
-    // Opportunities Section Functions
-    function showOpportunitiesSection(subsectionId) {
-      document.querySelectorAll('.opportunity-subsection').forEach(subsection => subsection.style.display = 'none');
-      document.getElementById(subsectionId).style.display = 'block';
-    }
-
-    function generateReferralCode() {
-      const referralCode = `REF${Math.floor(Math.random() * 10000)}`;
-      document.getElementById("referralCode").innerText = referralCode;
-      document.getElementById("generateReferralButton").disabled = true;
-    }
-
-    function grabToken() {
-      alert("Token grabbed!");
-    }
-
-    function startSurvey() {
-      alert("Survey started!");
-    }
-
-    // Account Section Functions
-    function showProfile() {
-      document.getElementById("profileSection").style.display = 'block';
-      document.getElementById("withdrawSection").style.display = 'none';
-      document.getElementById("addClientSection").style.display = 'none';
-    }
-
-    function showWithdraw() {
-      document.getElementById("profileSection").style.display = 'none';
-      document.getElementById("withdrawSection").style.display = 'block';
-      document.getElementById("addClientSection").style.display = 'none';
-    }
-
-    function showAddClient() {
-      document.getElementById("profileSection").style.display = 'none';
-      document.getElementById("withdrawSection").style.display = 'none';
-      document.getElementById("addClientSection").style.display = 'block';
-    }
-
-    function updatePassword() {
-      const newPassword = document.getElementById("newPassword").value;
-      alert("Password updated to: " + newPassword);
-    }
-
-    function requestPayout() {
-      const phone = document.getElementById("withdrawPhone").value;
-      const amount = document.getElementById("withdrawAmount").value;
-      alert("Payout request sent for " + phone + " with amount: " + amount);
-    }
-
-    function showVerification() {
-      alert("Next step: Verification.");
-    }
-  </script>
+  <script src="scripts.js"></script>
 </body>
-
 </html>
